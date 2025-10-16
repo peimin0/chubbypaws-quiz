@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ChubbyPaws｜你的靈魂貓咪是誰？互動測驗</title>
+
+<!-- Primary Brand Colors -->
+<style>
+:root{
+  --brand-bg:#fff7ed;      /* 淡米杏 */
+  --brand-card:#ffffff;
+  --brand-text:#2f2a28;
+  --brand-accent:#ffb86b;  /* 粉橘貓掌色 */
+  --brand-accent-2:#e9d7c9;
+}
+html,body{margin:0;padding:0;}
+body{
+  font-family: "Noto Sans TC", "PingFang TC", "Heiti TC", sans-serif;
+  background: var(--brand-bg);
+  color: var(--brand-text);
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  min-height:100dvh;
+}
+.container{
+  width:min(92vw, 640px);
+  background:var(--brand-card);
+  border-radius:24px;
+  padding:24px 20px;
+  margin:28px 0 40px;
+  box-shadow:0 8px 24px rgba(0,0,0,.08);
+  position:relative;
+  overflow:hidden;
+}
+.brand{
+  display:flex; align-items:center; justify-content:center; gap:10px;
+  margin-bottom:6px;
+}
+.brand .paw{
+  width:28px;height:28px;border-radius:50%;
+  background:var(--brand-accent);
+  box-shadow: 14px 8px 0 0 var(--brand-accent), -14px 8px 0 0 var(--brand-accent), 0 18px 0 0 var(--brand-accent);
+  position:relative;
+}
+.brand-name{
+  font-weight:800; letter-spacing:.5px;
+}
+h1{
+  text-align:center; font-size:1.7rem; margin:4px 0 10px;
+}
+.sub{
+  text-align:center; font-size:.95rem; opacity:.8; margin-bottom:14px;
+}
+.progress{height:10px; background:var(--brand-accent-2); border-radius:6px; overflow:hidden; margin:12px 0 18px;}
+.progress-bar{height:10px; width:0%; background:var(--brand-accent); transition:width .3s ease;}
+.question{font-weight:700; margin:10px 0 12px; line-height:1.5;}
+.options{display:grid; grid-template-columns:1fr; gap:10px;}
+.options button{
+  padding:12px 14px; border-radius:14px; border:2px solid var(--brand-accent-2);
+  background:#fff; cursor:pointer; font-size:1rem; text-align:left;
+  transition:transform .05s ease, background .2s ease, border-color .2s ease;
+}
+.options button:active{ transform:scale(.99); }
+.options button:hover{ background:var(--brand-bg); border-color:var(--brand-accent); }
+.footer{
+  margin-top:12px; text-align:center; font-size:.9rem; opacity:.75;
+}
+.badge{
+  position:absolute; top:-28px; right:-28px; background:var(--brand-accent);
+  color:#fff; padding:32px; border-radius:50%; font-weight:700; transform:rotate(18deg);
+  box-shadow:0 8px 24px rgba(0,0,0,.2);
+}
+.result{ display:none; text-align:center; }
+.result h2{ font-size:1.4rem; margin:8px 0; }
+.result p{ line-height:1.6; }
+.btn{
+  margin-top:14px; background:var(--brand-accent); color:#fff;
+  border:none; padding:12px 18px; border-radius:14px; font-size:1rem; cursor:pointer;
+}
+.btn-secondary{
+  background:var(--brand-accent-2); color:#2f2a28;
+}
+.share-note{ font-size:.9rem; opacity:.8; margin-top:8px; }
+.score-hint{
+  background:var(--brand-bg); border:1px dashed var(--brand-accent-2);
+  border-radius:12px; padding:10px; margin-top:12px; text-align:left; font-size:.92rem;
+}
+.small{ font-size:.86rem; opacity:.8; }
+@media (min-width: 560px){
+  .options{ grid-template-columns:1fr 1fr; }
+}
+</style>
+
+<!-- Open Graph / Twitter Card -->
+<meta property="og:title" content="你的靈魂貓咪是誰？7 題找出最適合你的貓咪品種｜ChubbyPaws" />
+<meta property="og:description" content="互動測驗：即時配對英短、布偶、俄羅斯藍、緬因、孟加拉…看看你是哪一派！" />
+<meta property="og:image" content="https://dummyimage.com/1200x630/ffb86b/ffffff&text=ChubbyPaws+%7C+%E9%9D%88%E9%AD%82%E8%B2%93%E5%92%AA%E6%B8%AC%E9%A9%97" />
+<meta property="og:type" content="website" />
+<meta property="og:url" content="https://example.com/cat-quiz?utm_source=instagram&utm_medium=bio&utm_campaign=cat_quiz" />
+<meta name="twitter:card" content="summary_large_image" />
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 64 64%27%3E%3Ccircle cx=%2732%27 cy=%2732%27 r=%2732%27 fill=%27%23ffb86b%27/%3E%3Ccircle cx=%2720%27 cy=%2726%27 r=%276%27 fill=%27%23fff%27/%3E%3Ccircle cx=%2732%27 cy=%2722%27 r=%276%27 fill=%27%23fff%27/%3E%3Ccircle cx=%2744%27 cy=%2726%27 r=%276%27 fill=%27%23fff%27/%3E%3Ccircle cx=%2732%27 cy=%2738%27 r=%278%27 fill=%27%23fff%27/%3E%3C/svg%3E" />
+
+<!-- (可選) Google Analytics 4：把 G-XXXX 換成你的代碼即可
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-XXXXXXX"></script>
+<script>
+window.dataLayer = window.dataLayer || [];
+function gtag(){dataLayer.push(arguments);}
+gtag('js', new Date());
+gtag('config', 'G-XXXXXXX');
+</script>
+-->
+</head>
+<body>
+  <div class="container">
+    <div class="badge">QUIZ</div>
+    <div class="brand">
+      <div class="paw" aria-hidden="true"></div>
+      <div class="brand-name">ChubbyPaws</div>
+    </div>
+    <h1>你的靈魂貓咪是誰？</h1>
+    <div class="sub">7 題互動測驗｜找到最適合你的貓咪品種</div>
+
+    <div class="progress"><div class="progress-bar" id="progressBar"></div></div>
+    <div id="quiz"></div>
+
+    <div class="result" id="result"></div>
+
+    <div class="footer small">© ChubbyPaws · 領養代替購買 · 評估時間與長期照護責任</div>
+  </div>
+
+<script>
+// ---- 問題資料 ----
+const quizData = [
+  { q: "Q1. 你理想的生活節奏是？",
+    a: ["A. 慢活、宅家、安靜", "B. 白天忙、晚上想陪伴", "C. 熱鬧、喜歡互動", "D. 常外出、行程不固定"]
+  },
+  { q: "Q2. 你最希望貓咪帶給你的感覺是？",
+    a: ["A. 治癒與安靜", "B. 活潑互動", "C. 高貴氣質", "D. 搞怪逗趣"]
+  },
+  { q: "Q3. 你的居住環境？",
+    a: ["A. 小套房或公寓", "B. 一般住宅", "C. 有陽台採光好", "D. 大坪數或多貓"]
+  },
+  { q: "Q4. 你對掉毛／清潔的忍耐度？",
+    a: ["A. 很高", "B. 普通", "C. 不太能接受", "D. 對過敏較敏感"]
+  },
+  { q: "Q5. 你偏好的貓咪個性？",
+    a: ["A. 安靜黏人", "B. 聰明好玩", "C. 高傲優雅", "D. 傻萌搞怪"]
+  },
+  { q: "Q6. 你的外出時間？",
+    a: ["A. 幾乎都在家", "B. 白天上班、晚上在家", "C. 常外出或出差", "D. 不一定、很彈性"]
+  },
+  { q: "Q7. 若貓咪需要時間適應，你會？",
+    a: ["A. 耐心陪伴", "B. 用遊戲建立信任", "C. 給牠空間", "D. 希望快點親人"]
+  }
+];
+
+// ---- 加權規則（更準確的網站互動版）----
+// Q1, Q6 權重較高 (×2)；Q3 中度 (×1.5)；其餘 ×1
+const weights = [2,1,1.5,1,1,2,1];
+
+// 若要微調每題對 A/B/C/D 的偏好強度，可用矩陣（這裡以均等 1 為預設）
+const affinity = [
+  {A:1,B:1,C:1,D:1},
+  {A:1,B:1,C:1,D:1},
+  {A:1,B:1,C:1,D:1},
+  {A:1,B:1,C:1,D:1},
+  {A:1,B:1,C:1,D:1},
+  {A:1,B:1,C:1,D:1},
+  {A:1,B:1,C:1,D:1},
+];
+
+const scores = {A:0,B:0,C:0,D:0};
+let current = 0;
+
+// ---- UI 載入 ----
+function loadQuestion() {
+  const quiz = document.getElementById("quiz");
+  const total = quizData.length;
+  quiz.innerHTML = "";
+  if (current < total) {
+    document.getElementById("progressBar").style.width = ((current/total)*100)+"%";
+    const qElem = document.createElement("div");
+    qElem.className="question";
+    qElem.textContent = quizData[current].q;
+    quiz.appendChild(qElem);
+
+    const optDiv = document.createElement("div");
+    optDiv.className="options";
+    quizData[current].a.forEach((option) => {
+      const btn = document.createElement("button");
+      btn.setAttribute("aria-label", option);
+      btn.textContent = option;
+      btn.onclick = () => handleAnswer(option.charAt(0));
+      optDiv.appendChild(btn);
+    });
+    quiz.appendChild(optDiv);
+
+    const tip = document.createElement("div");
+    tip.className="score-hint";
+    tip.innerHTML = "計分方式：本頁為加權計分（Q1/Q6×2、Q3×1.5），其餘×1。<br><span class='small'>* 這讓結果更貼近你的實際生活節奏與外出型態。</span>";
+    quiz.appendChild(tip);
+  } else {
+    showResult();
+  }
+}
+
+function handleAnswer(letter){
+  // 依權重與親和力加分
+  const w = weights[current] || 1;
+  const aff = affinity[current]?.[letter] ?? 1;
+  scores[letter] += w * aff;
+  current++;
+  loadQuestion();
+}
+
+// ---- 結果 ----
+function showResult(){
+  document.getElementById("progressBar").style.width = "100%";
+  const quiz = document.getElementById("quiz");
+  quiz.style.display = "none";
+  const res = document.getElementById("result");
+  res.style.display = "block";
+
+  // 找最高分與第二名（用於平手提示）
+  const entries = Object.entries(scores).sort((a,b)=>b[1]-a[1]);
+  const top = entries[0][0];
+  const topScore = entries[0][1];
+  const secondScore = entries[1][1];
+  const tie = Math.abs(topScore - secondScore) <= 1; // 接近視為混合型
+
+  const mapping = {
+    A: {
+      title:"溫柔宅系",
+      breeds:"英國短毛、蘇格蘭摺耳（留意關節）、布偶",
+      desc:"慢節奏、療癒陪伴，安靜黏人、穩定溫順。"
+    },
+    B: {
+      title:"互動活潑派",
+      breeds:"美國短毛、緬因、孟加拉",
+      desc:"聰明好玩、愛探索，需要豐富互動與遊戲。"
+    },
+    C: {
+      title:"高冷氣質派",
+      breeds:"俄羅斯藍、波斯、異國短毛",
+      desc:"優雅穩定、存在感強，互動頻率不需太高。"
+    },
+    D: {
+      title:"自由搞怪派",
+      breeds:"橘貓（花色）、混種美短、斯芬克斯",
+      desc:"幽默可愛、個性鮮明，社交感強、樂於互動。"
+    }
+  };
+
+  let text = `🐾 你是【${mapping[top].title}】<br>
+  推薦貓種：${mapping[top].breeds}<br>
+  ${mapping[top].desc}`;
+
+  if(tie){
+    const second = entries[1][0];
+    text += `<br><br>🔎 你同時帶有【${mapping[second].title}】特質。<br>
+    建議依實際條件（空間大小、外出時間、過敏狀況）在兩者之間做選擇。`;
+  }
+
+  res.innerHTML = `
+    <h2>測驗結果</h2>
+    <p>${text}</p>
+    <button class="btn" onclick="restart()">再玩一次</button>
+    <button class="btn btn-secondary" onclick="shareResult()">分享結果</button>
+    <div class="share-note">長按截圖分享到 IG 限動並標註 @ChubbyPaws</div>
+  `;
+}
+
+// ---- 分享（支援的瀏覽器會跳系統分享面板）----
+function shareResult(){
+  const entries = Object.entries(scores).sort((a,b)=>b[1]-a[1]);
+  const top = entries[0][0];
+  const title = "我的靈魂貓咪測驗結果";
+  const text = {
+    A:"我是溫柔宅系～",
+    B:"我是互動活潑派！",
+    C:"我是高冷氣質派✨",
+    D:"我是自由搞怪派😸"
+  }[top] || "一起来玩吧～";
+  const url = location.href + (location.search ? "&" : "?") + "utm_source=instagram&utm_medium=share&utm_campaign=cat_quiz";
+  if(navigator.share){
+    navigator.share({title, text, url});
+  }else{
+    alert("已複製分享連結，快貼到限動吧！");
+    copyText(url);
+  }
+}
+
+function copyText(t){
+  const ta = document.createElement("textarea");
+  ta.value = t;
+  document.body.appendChild(ta);
+  ta.select(); document.execCommand("copy");
+  document.body.removeChild(ta);
+}
+
+// ---- 重玩 ----
+function restart(){
+  scores.A=0; scores.B=0; scores.C=0; scores.D=0;
+  current=0;
+  const quiz = document.getElementById("quiz");
+  quiz.style.display="block";
+  const res = document.getElementById("result");
+  res.style.display="none";
+  loadQuestion();
+}
+
+loadQuestion();
+</script>
+</body>
+</html>
